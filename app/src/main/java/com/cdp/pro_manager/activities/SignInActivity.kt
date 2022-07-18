@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.cdp.pro_manager.R
+import com.cdp.pro_manager.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -40,6 +41,13 @@ class SignInActivity : BaseActivity() {
         }
 
         setupActionBar()
+    }
+
+    fun signInSuccess(user: User){
+        hideProgressDialog()
+        startActivity(Intent(this,MainActivity::class.java))
+        finish()
+
     }
 
     private fun setupActionBar(){
