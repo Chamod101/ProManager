@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ProManager</string>
+    <string name="image_contentDescription">image</string>
+    <string name="let_s_get_started_text">Let\'s Get started</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="textintro">Collaborate and plan Together Across Multiple Devices on ProManagers Minimalist Interface.</string>
+
+    <string name="sign_up_description_text">Enter your name, email id and password to register with us</string>
+    <string name="name">Enter Your Name</string>
+    <string name="password">Enter Your Password</string>
+    <string name="email">Enter Your Email</string>
+
+    <string name="sign_in_description_text">Enter your Email and password to login to your account</string>
+    
+    <string name="please_click_back_again_to_exit">Please click back again to exit.</string>
+    <string name="please_wait">Please wait&#8230;</string>
+</resources>
