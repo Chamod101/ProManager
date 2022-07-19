@@ -19,6 +19,7 @@ data class User (
         parcel.readLong(),
         parcel.readString()!!
     ) {
+
     }
 
     override fun describeContents() = 0

@@ -12,10 +12,14 @@
     <string name="email">Enter Your Email</string>
 
     <string name="sign_in_description_text">Enter your Email and password to login to your account</string>
-    
+
     <string name="please_click_back_again_to_exit">Please click back again to exit.</string>
     <string name="please_wait">Please wait&#8230;</string>
 
     <string name="nav_my_profile">My Profile</string>
     <string name="nav_sign_out">Sign Out</string>
+
+    <string name="mobile">Mobile</string>
+    <string name="update">UPDATE</string>
+    <string name="my_profile_title">My Profile</string>
 </resources>

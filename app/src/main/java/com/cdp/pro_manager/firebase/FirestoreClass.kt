@@ -1,6 +1,8 @@
 package com.cdp.pro_manager.firebase
 
+import android.app.Activity
 import android.util.Log
+import com.cdp.pro_manager.activities.MainActivity
 import com.cdp.pro_manager.activities.SignInActivity
 import com.cdp.pro_manager.activities.SignUpActivity
 import com.cdp.pro_manager.models.User
@@ -24,16 +26,32 @@ class FirestoreClass {
 
     }
 
-    fun signinUser(activity: SignInActivity){
+    fun signinUser(activity: Activity){
         mFireStore.collection(Constants.USERS).document(getCurrentUserId())
             .get()
             .addOnSuccessListener {document ->
-                val loggedInUser = document.toObject(User::class.java)
-                if(loggedInUser != null)
-                activity.signInSuccess(loggedInUser)
+                val loggedInUser = document.toObject(User::class.java)!!
+
+                when(activity){
+                    is SignInActivity ->{
+                        activity.signInSuccess(loggedInUser)
+                    }
+                    is MainActivity ->{
+                        activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                }
 
             }.addOnFailureListener {
-                    e->
+                      e->
+                    when(activity){
+                        is SignInActivity ->{
+                            activity.hideProgressDialog()
+                        }
+                        is MainActivity ->{
+                            activity.hideProgressDialog()
+                        }
+                    }
+
                 Log.e("SignInUser","Error writing document")
             }
     }
