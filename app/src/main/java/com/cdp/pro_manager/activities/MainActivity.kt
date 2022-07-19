@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -37,7 +38,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         navview?.setNavigationItemSelectedListener(this)
 
-      //FirestoreClass().signinUser(this)
+      FirestoreClass().loadUserData(this)
 
 
 
@@ -60,6 +61,20 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         }
     }
 
+    fun loadImageAndName(user: User){
+        var userimg = findViewById<ImageView>(R.id.nav_user_image)
+        var uname = findViewById<TextView>(R.id.tv_username)
+        Glide
+            .with(this@MainActivity)
+            .load(user.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(userimg)
+        uname.setText(user.name)
+
+
+    }
+
     override fun onBackPressed() {
         if(drawerlayout!!.isDrawerOpen(GravityCompat.START)){
             drawerlayout?.closeDrawer(GravityCompat.START)
@@ -70,7 +85,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
     fun updateNavigationUserDetails(user:User){
         Glide
-            .with(this)
+            .with(this@MainActivity)
             .load(user.image)
             .centerCrop()
             .placeholder(R.drawable.ic_user_place_holder)

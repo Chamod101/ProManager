@@ -3,6 +3,7 @@ package com.cdp.pro_manager.firebase
 import android.app.Activity
 import android.util.Log
 import com.cdp.pro_manager.activities.MainActivity
+import com.cdp.pro_manager.activities.MyProfileActivity
 import com.cdp.pro_manager.activities.SignInActivity
 import com.cdp.pro_manager.activities.SignUpActivity
 import com.cdp.pro_manager.models.User
@@ -26,7 +27,7 @@ class FirestoreClass {
 
     }
 
-    fun signinUser(activity: Activity){
+    fun loadUserData(activity: Activity){
         mFireStore.collection(Constants.USERS).document(getCurrentUserId())
             .get()
             .addOnSuccessListener {document ->
@@ -37,7 +38,12 @@ class FirestoreClass {
                         activity.signInSuccess(loggedInUser)
                     }
                     is MainActivity ->{
-                        activity.updateNavigationUserDetails(loggedInUser)
+                        //activity.updateNavigationUserDetails(loggedInUser)
+                        activity.loadImageAndName(loggedInUser)
+                    }
+                    is MyProfileActivity ->{
+                        activity.setUserDataInUI(loggedInUser)
+
                     }
                 }
 
