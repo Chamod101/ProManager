@@ -1,8 +1,10 @@
 package com.cdp.pro_manager.activities
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
@@ -24,6 +26,10 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     var navview:NavigationView?=null
     var img:ImageView?=null
     var usertext:TextView?=null
+
+    companion object{
+        const val My_PROFILE_REQUEST_CODE : Int = 11
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,10 +100,20 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == My_PROFILE_REQUEST_CODE){
+            FirestoreClass().loadUserData(this)
+        }else{
+            Log.e("Cancelled","Cancelled")
+        }
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_my_profile ->{
-                startActivity(Intent(this,MyProfileActivity::class.java))
+                startActivityForResult(Intent(this,MyProfileActivity::class.java),
+                    My_PROFILE_REQUEST_CODE)
             }
 
             R.id.nav_sign_out ->{
