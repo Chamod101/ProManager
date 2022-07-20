@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,10 +14,15 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cdp.pro_manager.R
+import com.cdp.pro_manager.adapters.BoardItemsAdapter
 import com.cdp.pro_manager.firebase.FirestoreClass
+import com.cdp.pro_manager.models.Board
 import com.cdp.pro_manager.models.User
+import com.cdp.pro_manager.utils.Constants
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -28,10 +34,14 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     var img:ImageView?=null
     var usertext:TextView?=null
     var fabButton: FloatingActionButton? =null
+    var recycle : RecyclerView?=null
+    var recycleText: TextView?=null
 
     companion object{
         const val My_PROFILE_REQUEST_CODE : Int = 11
+        const val CREATE_BOARD_REQUEST_CODE:Int = 12
     }
+    private lateinit var mUserName:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,19 +52,41 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         img = findViewById(R.id.nav_user_image)
         usertext = findViewById(R.id.tv_username)
         fabButton = findViewById(R.id.fab_create_board)
+        recycle = findViewById(R.id.rv_boards_list)
+        recycleText = findViewById(R.id.tv_no_boards_available)
 
         setupActionBar()
 
         navview?.setNavigationItemSelectedListener(this)
 
-      FirestoreClass().loadUserData(this)
+      FirestoreClass().loadUserData(this,true)
 
         fabButton?.setOnClickListener(){
-            startActivity(Intent(this,CreateBoardActivity::class.java))
+            val intent = Intent(this,CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME,mUserName)
+            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
 
         }
 
 
+    }
+
+    fun populateBoardsListToUI(boardList: ArrayList<Board>){
+        hideProgressDialog()
+
+        if(boardList.size >0){
+            recycle?.visibility = View.VISIBLE
+            recycleText?.visibility =View.GONE
+
+            recycle?.layoutManager = LinearLayoutManager(this)
+            recycle?.setHasFixedSize(true)
+
+            val adapter = BoardItemsAdapter(this,boardList)
+            recycle?.adapter = adapter
+        }else{
+            recycle?.visibility = View.GONE
+            recycleText?.visibility =View.VISIBLE
+        }
     }
 
     private fun setupActionBar(){
@@ -74,7 +106,8 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         }
     }
 
-    fun loadImageAndName(user: User){
+    fun loadImageAndName(user: User,readBoardsList: Boolean){
+        mUserName = user.name
         var userimg = findViewById<ImageView>(R.id.nav_user_image)
         var uname = findViewById<TextView>(R.id.tv_username)
         Glide
@@ -83,7 +116,12 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
             .centerCrop()
             .placeholder(R.drawable.ic_user_place_holder)
             .into(userimg)
-        uname.setText(user.name)
+        uname.text=user.name
+
+        if(readBoardsList){
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().getBoardsList(this)
+        }
 
 
     }
@@ -97,6 +135,8 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     }
 
     fun updateNavigationUserDetails(user:User){
+        //meka wenuwata loadImage function eka use krnna
+        mUserName = user.name
         Glide
             .with(this@MainActivity)
             .load(user.image)
@@ -111,6 +151,9 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK && requestCode == My_PROFILE_REQUEST_CODE){
             FirestoreClass().loadUserData(this)
+        }else if(resultCode == Activity.RESULT_OK && requestCode == CREATE_BOARD_REQUEST_CODE){
+            FirestoreClass().getBoardsList(this)
+
         }else{
             Log.e("Cancelled","Cancelled")
         }
