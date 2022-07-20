@@ -4,8 +4,8 @@
     package="com.cdp.pro_manager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pro_Manager"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.CreateBoardActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Pro_Manager.NoActionBar"/>
         <activity
             android:name=".activities.MyProfileActivity"
             android:exported="false"

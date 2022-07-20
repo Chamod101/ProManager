@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.cdp.pro_manager.R
 import com.cdp.pro_manager.firebase.FirestoreClass
 import com.cdp.pro_manager.models.User
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -26,6 +27,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     var navview:NavigationView?=null
     var img:ImageView?=null
     var usertext:TextView?=null
+    var fabButton: FloatingActionButton? =null
 
     companion object{
         const val My_PROFILE_REQUEST_CODE : Int = 11
@@ -39,6 +41,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         navview = findViewById(R.id.nav_view)
         img = findViewById(R.id.nav_user_image)
         usertext = findViewById(R.id.tv_username)
+        fabButton = findViewById(R.id.fab_create_board)
 
         setupActionBar()
 
@@ -46,6 +49,10 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
       FirestoreClass().loadUserData(this)
 
+        fabButton?.setOnClickListener(){
+            startActivity(Intent(this,CreateBoardActivity::class.java))
+
+        }
 
 
     }
