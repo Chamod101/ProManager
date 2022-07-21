@@ -83,6 +83,16 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
             val adapter = BoardItemsAdapter(this,boardList)
             recycle?.adapter = adapter
+
+            adapter.setOnClickListener(object :BoardItemsAdapter.OnClickListener{
+                override fun onClick(position: Int, model: Board) {
+
+                    val intent = Intent(this@MainActivity,TaskListActivity::class.java)
+                    intent.putExtra(Constants.DOCUMENT_ID, model.documentId)
+                    startActivity(intent)
+                }
+            })
+
         }else{
             recycle?.visibility = View.GONE
             recycleText?.visibility =View.VISIBLE

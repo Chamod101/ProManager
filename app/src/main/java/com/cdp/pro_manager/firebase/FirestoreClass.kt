@@ -8,6 +8,7 @@ import com.cdp.pro_manager.models.Board
 import com.cdp.pro_manager.models.User
 import com.cdp.pro_manager.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
@@ -26,6 +27,24 @@ class FirestoreClass {
 
     }
 
+    fun getBoardDetails(activity: TaskListActivity,documentId: String){
+
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentId)
+            .get()
+            .addOnSuccessListener {
+                document ->
+                Log.i(activity.javaClass.simpleName,document.toString())
+
+                activity.boardDetails((document.toObject(Board::class.java)!!))
+
+
+            }.addOnFailureListener {
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating")
+            }
+
+    }
 
 
     fun createBoard(activity: CreateBoardActivity,board:Board){
@@ -46,25 +65,24 @@ class FirestoreClass {
             }
     }
 
-    fun getBoardsList(activity: MainActivity){
+    fun getBoardsList(activity: MainActivity) {
         mFireStore.collection(Constants.BOARDS)
             .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserId())
             .get()
-            .addOnSuccessListener{
-                document ->
-                Log.i(activity.javaClass.simpleName,document.documents.toString())
+            .addOnSuccessListener { document ->
+                Log.i(activity.javaClass.simpleName, document.documents.toString())
                 val boardList: ArrayList<Board> = ArrayList()
-                for(i in document.documents){
+                for (i in document.documents) {
                     val board = i.toObject(Board::class.java)!!
                     board.documentId = i.id
                     boardList.add(board)
                 }
                 activity.populateBoardsListToUI(boardList)
-            }.addOnFailureListener{
-                e->
+            }.addOnFailureListener { e ->
                 activity.hideProgressDialog()
-                Log.e(activity.javaClass.simpleName,"Error while creating a board. ",e)
+                Log.e(activity.javaClass.simpleName, "Error while creating a board. ", e)
             }
+
     }
 
 
