@@ -3,9 +3,13 @@ package com.cdp.pro_manager.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cdp.pro_manager.R
+import com.cdp.pro_manager.adapters.TaskListItemsAdapter
 import com.cdp.pro_manager.firebase.FirestoreClass
 import com.cdp.pro_manager.models.Board
+import com.cdp.pro_manager.models.Task
 import com.cdp.pro_manager.utils.Constants
 
 class TaskListActivity : BaseActivity() {
@@ -28,7 +32,7 @@ class TaskListActivity : BaseActivity() {
         FirestoreClass().getBoardDetails(this,boardDocumentId)
     }
 
-     fun setupActionBar(title: String){
+     private fun setupActionBar(title: String){
         val toolbartaskactivity:Toolbar = findViewById(R.id.toolbar_task_list_activity)
         setSupportActionBar(toolbartaskactivity)
         val actionBar = supportActionBar
@@ -43,8 +47,19 @@ class TaskListActivity : BaseActivity() {
     }
 
     fun boardDetails(board: Board){
+        var rvTaskList:RecyclerView = findViewById(R.id.rv_task_list)
         hideProgressDialog()
         setupActionBar(board.name)
+
+        val addTaskList = Task(resources.getString(R.string.add_list))
+        board.taskList.add(addTaskList)
+
+        rvTaskList.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        rvTaskList.setHasFixedSize(true)
+
+        val adapter = TaskListItemsAdapter(this,board.taskList)
+        rvTaskList.adapter = adapter
+
 
     }
 }
