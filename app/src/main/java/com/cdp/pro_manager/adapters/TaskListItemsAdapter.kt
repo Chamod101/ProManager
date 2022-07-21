@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cdp.pro_manager.R
 import com.cdp.pro_manager.activities.TaskListActivity
@@ -97,6 +98,34 @@ open class TaskListItemsAdapter (private val context: Context, private var list:
             holder.itemView.requireViewById<ImageButton>(R.id.ib_delete_list).setOnClickListener {
                 alertDialogForDeleteList(position,model.title)
             }
+
+            holder.itemView.requireViewById<TextView>(R.id.tv_add_card).setOnClickListener {
+                holder.itemView.requireViewById<TextView>(R.id.tv_add_card).visibility =View.GONE
+                holder.itemView.requireViewById<CardView>(R.id.cv_add_card).visibility = View.VISIBLE
+            }
+
+            holder.itemView.requireViewById<ImageButton>(R.id.ib_close_card_name).setOnClickListener {
+                holder.itemView.requireViewById<TextView>(R.id.tv_add_card).visibility =View.VISIBLE
+                holder.itemView.requireViewById<CardView>(R.id.cv_add_card).visibility = View.GONE
+            }
+
+            holder.itemView.requireViewById<ImageButton>(R.id.ib_done_card_name).setOnClickListener {
+
+                val cardName = holder.itemView.requireViewById<EditText>(R.id.et_card_name).text.toString()
+
+                if(cardName.isNotEmpty()){
+                    if(context is TaskListActivity){
+                        context.addCardToTaskList(position,cardName)
+                    }
+                }else{
+                    Toast.makeText(context,"Please Enter a Card Name.",Toast.LENGTH_LONG).show()
+                }
+            }
+            holder.itemView.requireViewById<RecyclerView>(R.id.rv_card_list).layoutManager = LinearLayoutManager(context)
+            holder.itemView.requireViewById<RecyclerView>(R.id.rv_card_list).setHasFixedSize(true)
+
+            val adapter = CardListItemsAdapter(context,model.cards)
+            holder.itemView.requireViewById<RecyclerView>(R.id.rv_card_list).adapter = adapter
 
 
         }
