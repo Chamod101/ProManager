@@ -6,11 +6,12 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.cdp.pro_manager.R
+import com.cdp.pro_manager.activities.TaskListActivity
 import com.cdp.pro_manager.models.Task
 
 open class TaskListItemsAdapter (private val context: Context, private var list: ArrayList<Task>):
@@ -39,6 +40,29 @@ open class TaskListItemsAdapter (private val context: Context, private var list:
             }else{
                 holder.itemView.requireViewById<TextView>(R.id.tv_add_task_list).visibility = View.GONE
                 holder.itemView.requireViewById<LinearLayout>(R.id.ll_task_item).visibility =View.VISIBLE
+            }
+            holder.itemView.requireViewById<TextView>(R.id.tv_task_list_title).text = model.title
+            holder.itemView.requireViewById<TextView>(R.id.tv_add_task_list).setOnClickListener {
+                holder.itemView.requireViewById<TextView>(R.id.tv_add_task_list).visibility = View.GONE
+                holder.itemView.requireViewById<CardView>(R.id.cv_add_task_list_name).visibility =View.VISIBLE
+            }
+
+            holder.itemView.requireViewById<ImageButton>(R.id.ib_close_list_name).setOnClickListener {
+
+                holder.itemView.requireViewById<TextView>(R.id.tv_add_task_list).visibility = View.VISIBLE
+                holder.itemView.requireViewById<CardView>(R.id.cv_add_task_list_name).visibility =View.GONE
+            }
+            holder.itemView.requireViewById<ImageButton>(R.id.ib_done_list_name).setOnClickListener {
+
+                val listName = holder.itemView.requireViewById<EditText>(R.id.et_task_list_name).text.toString()
+
+                if(listName.isNotEmpty()){
+                    if(context is TaskListActivity){
+                        context.createTaskList(listName)
+                    }
+                }else{
+                    Toast.makeText(context,"Please Enter List Name.",Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
