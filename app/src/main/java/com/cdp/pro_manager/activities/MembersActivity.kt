@@ -1,5 +1,6 @@
 package com.cdp.pro_manager.activities
 
+import android.app.Activity
 import android.app.Dialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ class MembersActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
     private lateinit var mAssignedMembersList : ArrayList<User>
+    private var anyChangeMade: Boolean = false
     var toolbarmembersactivity : Toolbar?=null
     var recycleViewmember : RecyclerView? =null
 
@@ -121,9 +123,20 @@ class MembersActivity : BaseActivity() {
         dialog.show()
 
     }
+
+    override fun onBackPressed() {
+
+        if(anyChangeMade){
+            setResult(Activity.RESULT_OK)
+        }
+        super.onBackPressed()
+    }
+
     fun memberAssignSuccess(user:User){
         hideProgressDialog()
         mAssignedMembersList.add(user)
+
+        anyChangeMade = true
         setupMembersList(mAssignedMembersList)
     }
 
