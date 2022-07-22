@@ -23,6 +23,7 @@ import com.cdp.pro_manager.utils.Constants
 class MembersActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
+    private lateinit var mAssignedMembersList : ArrayList<User>
     var toolbarmembersactivity : Toolbar?=null
     var recycleViewmember : RecyclerView? =null
 
@@ -44,6 +45,7 @@ class MembersActivity : BaseActivity() {
     }
 
     fun setupMembersList(list: ArrayList<User>){
+        mAssignedMembersList = list
         hideProgressDialog()
 
         recycleViewmember?.layoutManager = LinearLayoutManager(this)
@@ -51,6 +53,12 @@ class MembersActivity : BaseActivity() {
 
         val adapter = MemberListItemsAdapter(this,list)
         recycleViewmember?.adapter = adapter
+    }
+
+    fun memberDetails(user: User){
+        mBoardDetails.assignedTo.add(user.id)
+        FirestoreClass().assignMemberToBoard(this,mBoardDetails,user)
+
     }
 
     private fun setupActionBar(){
@@ -95,6 +103,8 @@ class MembersActivity : BaseActivity() {
 
             if(email.isNotEmpty()){
                 dialog.dismiss()
+                showProgressDialog(resources.getString(R.string.please_wait))
+                FirestoreClass().getMemberDetails(this,email)
             }else{
                 Toast.makeText(this@MembersActivity,
                 "Please enter members email address.",Toast.LENGTH_LONG
@@ -110,6 +120,11 @@ class MembersActivity : BaseActivity() {
 
         dialog.show()
 
+    }
+    fun memberAssignSuccess(user:User){
+        hideProgressDialog()
+        mAssignedMembersList.add(user)
+        setupMembersList(mAssignedMembersList)
     }
 
 }
