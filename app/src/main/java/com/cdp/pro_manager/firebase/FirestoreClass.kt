@@ -175,7 +175,7 @@ class FirestoreClass {
         return currentUserID
     }
 
-    fun getAssignedMemberslistDetails(activity: MembersActivity, assignedTo : ArrayList<String>){
+    fun getAssignedMemberslistDetails(activity: Activity, assignedTo : ArrayList<String>){
         mFireStore.collection(Constants.USERS)
             .whereIn(Constants.ID,assignedTo)
             .get()
@@ -190,10 +190,16 @@ class FirestoreClass {
                     userList.add(user)
                 }
 
-                activity.setupMembersList(userList)
+                if(activity is MembersActivity)
+                    activity.setupMembersList(userList)
+                else if(activity is TaskListActivity)
+                    activity.boardMembersDetailsList(userList)
 
             }.addOnFailureListener { e->
-                activity.hideProgressDialog()
+                if(activity is MembersActivity)
+                    activity.hideProgressDialog()
+                else if(activity is TaskListActivity)
+                    activity.hideProgressDialog()
                 Log.e(
                     activity.javaClass.simpleName,
                     "Error while creating a board.",e
