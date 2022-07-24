@@ -1,8 +1,10 @@
 package com.cdp.pro_manager.firebase
 
 import android.app.Activity
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.cdp.pro_manager.activities.*
 import com.cdp.pro_manager.models.Board
 import com.cdp.pro_manager.models.User
@@ -113,16 +115,34 @@ class FirestoreClass {
     }
 
 
-    fun updateUserProfileData(activity: MyProfileActivity,userHashMap: HashMap<String,Any>){
+    fun updateUserProfileData(activity: Activity,userHashMap: HashMap<String,Any>){
         mFireStore.collection(Constants.USERS).document(getCurrentUserId())
             .update(userHashMap)
             .addOnSuccessListener{
                 Log.i(activity.javaClass.simpleName,"Profile data updated successfully!")
                 Toast.makeText(activity,"Profile updated successfully!",Toast.LENGTH_LONG).show()
-                activity.profileUpdateSuccess()
+
+                when(activity){
+                    is MainActivity ->{
+                        activity.tokenUpdateSucces()
+                    }
+                    is MyProfileActivity ->{
+                        activity.profileUpdateSuccess()
+                    }
+                }
+
+
             }.addOnFailureListener{
                 e->
-                activity.hideProgressDialog()
+                when(activity){
+                    is MainActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                    is MyProfileActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                }
+
                 Log.e(
                     activity.javaClass.simpleName,"Error while creating a board.",e
                 )
@@ -175,6 +195,7 @@ class FirestoreClass {
         return currentUserID
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun getAssignedMemberslistDetails(activity: Activity, assignedTo : ArrayList<String>){
         mFireStore.collection(Constants.USERS)
             .whereIn(Constants.ID,assignedTo)

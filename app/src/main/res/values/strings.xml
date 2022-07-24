@@ -58,5 +58,6 @@
     <string name="str_select_label_color">Select Label Color</string>
 
     <string name="str_select_members">Select Member</string>
+    <string name="default_notification_channel_id">ProManager_notification</string>
 
 </resources>

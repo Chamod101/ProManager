@@ -35,6 +35,22 @@ object Constants {
     const val SELECT:String ="Select"
     const val UN_SELECT: String ="UnSelect"
 
+    const val PROMANAGER_PREFERENCES = "ProManagerPrefs"
+    const val FCM_TOKEN_UPDATED = "fcmTokenUpdated"
+    const val FCM_TOKEN = "fcmToken"
+
+
+    const val FCM_BASE_URL:String = "https://fcm.googleapis.com/fcm/send"
+    const val FCM_AUTHORIZATION:String ="authorization"
+    const val FCM_KEY:String = "key"
+    const val FCM_SERVER_KEY:String= "AAAAuvwrfKk:APA91bE_iwOwryre6P_g1yRbWm23CiWgwBPtJQXgoCUH79K_CBe4LdjqJtmna-fZWpgq7KL7Yde_Rb08-LoGQKMyYIwLFGFNnlzbuZdrZPys-UZAHKaL3nu_LIF_vqrCE5npt-sf43Wy"
+    const val FCM_KEY_TITLE:String="title"
+    const val FCM_KEY_MESSAGE:String ="message"
+    const val FCM_KEY_DATA:String ="data"
+    const val FCM_KEY_TO:String = "to"
+
+
+
      fun shoImageChooser(activity: Activity){
         var galleyIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         activity.startActivityForResult(galleyIntent, PICK_IMAGE_REQUEST_CODE)
