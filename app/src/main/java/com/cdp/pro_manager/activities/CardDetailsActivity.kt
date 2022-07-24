@@ -314,7 +314,7 @@ class CardDetailsActivity : BaseActivity() {
             requireViewById<RecyclerView>(R.id.rv_selected_members_list).layoutManager = GridLayoutManager(
                 this,6
             )
-            val adapter = CardMemberListItemsAdapter(this,selectedMembersList)
+            val adapter = CardMemberListItemsAdapter(this,selectedMembersList,true)
 
             requireViewById<RecyclerView>(R.id.rv_selected_members_list).adapter = adapter
             adapter.setOnClickListener(

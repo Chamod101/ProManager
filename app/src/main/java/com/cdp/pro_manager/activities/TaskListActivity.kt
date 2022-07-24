@@ -2,11 +2,13 @@ package com.cdp.pro_manager.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +25,7 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails : Board
     private lateinit var mBoardDocumentId: String
-    private lateinit var mAssignedMemberDetailList: ArrayList<User>
+    lateinit var mAssignedMemberDetailList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -106,14 +108,7 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
         setupActionBar()
 
-        val addTaskList = Task(resources.getString(R.string.add_list))
-        board.taskList.add(addTaskList)
 
-        rvTaskList.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        rvTaskList.setHasFixedSize(true)
-
-        val adapter = TaskListItemsAdapter(this,board.taskList)
-        rvTaskList.adapter = adapter
 
 
         showProgressDialog(resources.getString(R.string.please_wait))
@@ -182,10 +177,20 @@ class TaskListActivity : BaseActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun boardMembersDetailsList(list:ArrayList<User>){
         mAssignedMemberDetailList = list
 
         hideProgressDialog()
+
+        val addTaskList = Task(resources.getString(R.string.add_list))
+        mBoardDetails.taskList.add(addTaskList)
+
+        requireViewById<RecyclerView>(R.id.rv_task_list).layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        requireViewById<RecyclerView>(R.id.rv_task_list).setHasFixedSize(true)
+
+        val adapter = TaskListItemsAdapter(this,mBoardDetails.taskList)
+        requireViewById<RecyclerView>(R.id.rv_task_list).adapter = adapter
     }
 
 
