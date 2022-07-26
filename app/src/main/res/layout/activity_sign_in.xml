@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/intro_background"
+    android:background="@drawable/home"
     tools:context=".activities.SignInActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/sign_in"
-            android:textColor="@color/primary_text_color"
+            android:textColor="@color/black"
             android:textSize="@dimen/toolbar_title_text_size"
             android:textStyle="bold" />
 
@@ -99,7 +99,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
