@@ -17,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed({
             var currentUserID = FirestoreClass().getCurrentUserId()
 
-            if (currentUserID.isNotEmpty()){
+            if (currentUserID.isNotEmpty()){    // If we have user id ------auto login
                 startActivity(Intent(this, MainActivity::class.java))
             }else{
                 startActivity(Intent(this, IntroActivity::class.java))
@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
             finish()
 
-        },2500)
+        },2500)     //Timer for Splash activity
 
     }
 }
